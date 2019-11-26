@@ -1,0 +1,100 @@
+from random import randrange as rnd, choice
+from tkinter import mainloop
+import tkinter as tk
+import time
+import math
+import time
+
+
+root = tk.Tk()
+# fr = tk.Frame(root)
+root.geometry('1000x800')
+
+# canv = tk.Canvas(root, bg='white')
+# canv.pack(fill=tk.BOTH, expand=1)
+
+
+class Field(tk.Canvas):
+    
+    def __init__(self, master):
+        super().__init__(master, background='pink')
+
+        self.x = 1000
+        self.y = 800
+        self.N_X = N_X = 20
+        self.N_Y = N_Y = 16
+        self.matrix = [[{} for i in range(N_X)] for j in range(N_Y)]
+
+        for i in range(N_X):
+            for j in range(N_Y):
+                self.matrix[j][i]['active'] = 0
+                self.matrix[j][i]['id'] = self.create_rectangle(5*i, 5*j, 5*(i + 1), 5*(j + 1), fill="grey", width=1, outline="black" )
+                print('risuu blya')
+
+    def UpdateField(self):
+        for i in range(self.N_X):
+            for j in range(self.N_Y):
+                if self.matrix[j][i]['active'] == 1:
+                    self.matrix[j][i]['id'] = self.create_rectangle(5*i, 5*j, 5*(i + 1), 5*(j + 1), fill="white", width=1, outline="black")
+                    self.itemconfig(self.matrix[j][i]['id'], fill='white')
+
+                if self.matrix[j][i]['active'] == 0:
+                    self.matrix[j][i]['id'] = self.create_rectangle(5*i, 5*j, 5*(i + 1), 5*(j + 1), fill="grey", width=1, outline="black" )
+                    self.itemconfig(self.matrix[j][i]['id'], fill='grey')
+
+    def Evolution(self):
+        tempmatrix = list([[{}] * self.N_X for i in range(self.N_Y)])
+        for i in range(self.N_X):
+            for j in range(self.N_Y):
+                #neighbors = self.matrix[i - 1][j - 1]['active'] + \
+                #            self.matrix[i - 1][j]['active'] + \
+                #            self.matrix[i - 1][j + 1]['active'] + \
+                 #           self.matrix[i][j - 1]['active'] + \
+                 #           self.matrix[i][j + 1]['active'] + \
+                 #           self.matrix[i + 1][j - 1]['active'] + \
+                 #           self.matrix[i + 1][j]['active'] + \
+                 #           self.matrix[i + 1][j + 1]['active']
+                neighbors = 3
+                if (neighbors == 3):
+                    tempmatrix[j][i]['active'] = 1
+                else:
+                    tempmatrix[j][i]['active'] = 0
+        for i in range(self.N_X):
+            for j in range(self. N_Y):
+                self.matrix[j][i]['active'] = tempmatrix[j][i]['active']
+        
+
+gamefield = Field(root)
+gamefield.pack(fill=tk.BOTH)
+gamefield.UpdateField()
+
+
+gamefield.matrix[2][2]['active'] = 1
+gamefield.matrix[2][3]['active'] = 1
+gamefield.matrix[2][4]['active'] = 1
+root.after(10000, gamefield.UpdateField()) 
+mainloop()
+
+#time.sleep(2)
+gamefield.Evolution()
+
+gamefield.matrix[2][2]['active'] = 0
+gamefield.matrix[3][3]['active'] = 0
+gamefield.matrix[4][4]['active'] = 0
+
+gamefield.UpdateField()
+
+time.sleep(5)
+gamefield.UpdateField()
+gamefield.matrix[5][5]['active'] = 0
+time.sleep(5)
+gamefield.UpdateField()
+gamefield.matrix[6][6]['active'] = 0
+time.sleep(5)
+gamefield.UpdateField()
+gamefield.matrix[7][7]['active'] = 0
+
+gamefield.UpdateField()
+
+# canv.create_rectangle(0,0, 100, 200, fill="black")
+#mainloop()
